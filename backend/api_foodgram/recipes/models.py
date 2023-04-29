@@ -3,9 +3,9 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from recipes.validators import hex_field_validator, slug_field_validator
-# from users.models import User
+from users.models import User
 
-User = get_user_model()
+# User = get_user_model()
 
 
 class Tag(models.Model):
@@ -71,29 +71,22 @@ class Recipe(models.Model):
         Tag,
         db_index=True,
         through='RecipeTag',
-        through_fields=('recipe', 'tag'),
+        # through_fields=('recipe', 'tag'),
         verbose_name='Список тегов',
-        # related_name='tags_recipes',
     )
-    # author = models.ForeignKey(
-    #     User,
-    #     on_delete=models.CASCADE,
-    #     verbose_name='Автор рецепта',
-    # )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Автор рецепта',
+    )
     ingredients = models.ManyToManyField(
         Ingredient,
         db_index=True,
         through='RecipeIngredient',
-        through_fields=('recipe', 'ingredient'),
+        # through_fields=('recipe', 'ingredient'),
         verbose_name='Список ингредиентов',
         related_name='ingredients_recipes',
     )
-#     is_favorited = models.BooleanField(
-#         verbose_name='Находится ли в избранном',
-#     )
-#     is_in_shopping_cart = models.BooleanField(
-#         verbose_name='Находится ли в корзине',
-#     )
     name = models.CharField(
         max_length=200,
         verbose_name='Название рецепта',
@@ -198,5 +191,69 @@ class RecipeIngredient(models.Model):
     def __str__(self):
         return 'Ингридиент {} в рецепте {}'.format(
             self.ingredient,
+            self.recipe
+        )
+
+
+class ShoppingCartUser(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='recipe_in_shoplist',
+        verbose_name='Пользователь, имеющий рецепт в cписке покупок',
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='recipe_in_shoplist',
+        verbose_name='Рецепт из списка покупок пользователя',
+    )
+
+    class Meta:
+        verbose_name = 'Связь пользователя и рецептов из списка покупок'
+        verbose_name_plural = (
+                'Связи пользователя и рецептов из списка покупок'
+        )
+        constraints = [
+            models.UniqueConstraint(
+                name='unique_user_shoplist',
+                fields=['user', 'recipe'],
+            ),
+        ]
+
+    def __str__(self):
+        return 'У {} в списке покупок рецепт: {}'.format(
+            self.user,
+            self.recipe
+        )
+
+
+class FavoriteRecipeUser(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='favorite_recipes',
+        verbose_name='Пользователь, имеющий избранные рецепты',
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='favorite_recipes',
+        verbose_name='Избранный рецепт определенного пользователя',
+    )
+
+    class Meta:
+        verbose_name = 'Связь избранного рецепта с пользователем'
+        verbose_name_plural = 'Связи избранных рецептов с пользователями'
+        constraints = [
+            models.UniqueConstraint(
+                name='unique_favorite_recipe_user',
+                fields=['user', 'recipe'],
+            ),
+        ]
+
+    def __str__(self):
+        return 'У {} в избранном рецепт: {}'.format(
+            self.user,
             self.recipe
         )
