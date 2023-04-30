@@ -1,8 +1,10 @@
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.validators import validate_email
 from django.db import models
 
-from .validators import validate_username, validate_email
+from .validators import validate_username
 
 
 class UserRole(models.TextChoices):
@@ -11,6 +13,7 @@ class UserRole(models.TextChoices):
 
 
 class User(AbstractUser):
+    """Описание нестандартной модели пользователя."""
     username = models.CharField(
         db_index=True,
         max_length=150,
@@ -42,6 +45,7 @@ class User(AbstractUser):
     password = models.CharField(
         verbose_name='Пароль',
         max_length=150,
+        validators=[validate_password],
     )
     auth_token = models.CharField(
         verbose_name='Токен',
@@ -51,15 +55,21 @@ class User(AbstractUser):
     )
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = [
+        'username',
+        'first_name',
+        'last_name',
+        'password',
+    ]
 
     class Meta:
+        ordering = ['username']
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
     def __str__(self):
         """Строковое представление модели."""
-        return self.username
+        return self.email
 
     @property
     def is_admin(self):
@@ -68,3 +78,32 @@ class User(AbstractUser):
     @property
     def is_user(self):
         return self.role == UserRole.USER
+
+
+class Follow(models.Model):
+    """Описание модели подписки на автора рецепта."""
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='follower',
+        verbose_name='Подписчик',
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='following',
+        verbose_name='Автор',
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                name='unique_user_author',
+                fields=['user', 'author'],
+            ),
+        ]
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+
+    def __str__(self) -> str:
+        return f'{self.author}'

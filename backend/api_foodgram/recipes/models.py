@@ -73,6 +73,7 @@ class Recipe(models.Model):
         through='RecipeTag',
         # through_fields=('recipe', 'tag'),
         verbose_name='Список тегов',
+        related_name='tags_recipes'
     )
     author = models.ForeignKey(
         User,

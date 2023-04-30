@@ -9,8 +9,10 @@ class UserAdmin(admin.ModelAdmin):
         'email',
         'first_name',
         'last_name',
-        'role',
+        'password',
+        'auth_token',
     )
+    list_filter = ('email', 'username',)
 
 
 admin.site.register(User, UserAdmin)
