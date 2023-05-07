@@ -45,14 +45,14 @@ class User(AbstractUser):
     password = models.CharField(
         verbose_name='Пароль',
         max_length=150,
-        validators=[validate_password],
+        # validators=[validate_password],
     )
-    auth_token = models.CharField(
-        verbose_name='Токен',
-        max_length=254,
-        blank=True,
-        null=True,
-    )
+    # auth_token = models.CharField(
+    #     verbose_name='Токен',
+    #     max_length=254,
+    #     blank=True,
+    #     null=True,
+    # )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
@@ -88,22 +88,25 @@ class Follow(models.Model):
         related_name='follower',
         verbose_name='Подписчик',
     )
-    author = models.ForeignKey(
+    following = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='following',
-        verbose_name='Автор',
+        verbose_name='Автор рецептов',
     )
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
                 name='unique_user_author',
-                fields=['user', 'author'],
+                fields=['user', 'following'],
             ),
         ]
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 
-    def __str__(self) -> str:
-        return f'{self.author}'
+    def __str__(self):
+        return 'Пользователь {} подписан на {}'.format(
+            self.user,
+            self.following
+        )
