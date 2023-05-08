@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password, make_password
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -9,10 +9,22 @@ from rest_framework.response import Response
 from api.pagination import UserPagination
 from api.serializers import (
     UserSerializer,
-    NewUserSerializer, SetPasswordSerializer)
+    NewUserSerializer, SetPasswordSerializer, TagSerializer)
+from recipes.models import Tag
 
 User = get_user_model()
 
+
+class ListRetrieveModelViewSet(
+        mixins.ListModelMixin,
+        mixins.RetrieveModelMixin,
+        viewsets.GenericViewSet):
+    """
+    Кастомный базовый вьюсет:
+    Вернуть список объектов (GET);
+    Вернуть объект (GET);
+    """
+    pass
 
 class UserViewSet(viewsets.ModelViewSet):
     """Представление для модели User"""
@@ -65,4 +77,10 @@ class UserViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TagViewSet(ListRetrieveModelViewSet):
+    """Представление для модели Tag"""
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
 

@@ -3,9 +3,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from recipes.validators import hex_field_validator, slug_field_validator
-from users.models import User
 
-# User = get_user_model()
+User = get_user_model()
 
 
 class Tag(models.Model):
@@ -19,6 +18,7 @@ class Tag(models.Model):
     )
     color = models.CharField(
         max_length=7,
+        unique=True,
         verbose_name='HEX цвет',
         help_text='Введите цвет в формате HEX',
         validators=[hex_field_validator]
@@ -71,7 +71,6 @@ class Recipe(models.Model):
         Tag,
         db_index=True,
         through='RecipeTag',
-        # through_fields=('recipe', 'tag'),
         verbose_name='Список тегов',
         related_name='tags_recipes'
     )
@@ -84,7 +83,6 @@ class Recipe(models.Model):
         Ingredient,
         db_index=True,
         through='RecipeIngredient',
-        # through_fields=('recipe', 'ingredient'),
         verbose_name='Список ингредиентов',
         related_name='ingredients_recipes',
     )

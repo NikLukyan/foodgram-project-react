@@ -1,5 +1,4 @@
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.validators import validate_email
 from django.db import models
@@ -45,14 +44,7 @@ class User(AbstractUser):
     password = models.CharField(
         verbose_name='Пароль',
         max_length=150,
-        # validators=[validate_password],
     )
-    # auth_token = models.CharField(
-    #     verbose_name='Токен',
-    #     max_length=254,
-    #     blank=True,
-    #     null=True,
-    # )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [

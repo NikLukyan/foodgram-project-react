@@ -34,10 +34,15 @@ class IngredientAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'color', 'slug')
+    list_filter = ('name',)
+
+
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(FavoriteRecipeUser)
 admin.site.register(RecipeIngredient)
 admin.site.register(RecipeTag)
 admin.site.register(ShoppingCartUser)
-admin.site.register(Tag)
+admin.site.register(Tag, TagAdmin)

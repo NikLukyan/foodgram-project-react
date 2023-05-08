@@ -4,6 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 
 from rest_framework import serializers
 
+from recipes.models import Tag
 from users.models import Follow
 
 
@@ -70,3 +71,15 @@ class SetPasswordSerializer(serializers.Serializer):
     def validate_new_password(self, value):
         validate_password(value)
         return value
+
+
+class TagSerializer(serializers.ModelSerializer):
+    """Сериализатор для тегов"""
+    class Meta:
+        model = Tag
+        fields = (
+            'id',
+            'name',
+            'color',
+            'slug'
+        )

@@ -2,14 +2,14 @@ from django.urls import include, path, re_path
 from rest_framework import routers
 
 from .views import (
-    UserViewSet,
+    UserViewSet, TagViewSet,
 )
 
 app_name = 'api'
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, basename='users')
-# router.register(r'titles', TitlesViewSet, basename='titles')
+router.register(r'tags', TagViewSet, basename='tags')
 # router.register(r'genres', GenresViewSet, basename='genres')
 # router.register(r'categories', CategoryViewSet, basename='categories')
 # router.register(
