@@ -11,14 +11,18 @@ from .models import (
 )
 
 
-class RecipeInline(admin.TabularInline):
+class RecipeTagInline(admin.TabularInline):
     model = RecipeTag
+
+
+class RecipeIngredientInline(admin.TabularInline):
+    model = RecipeIngredient
 
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('name', 'author', 'num_favorite_recipes',)
     list_filter = ('author', 'name', 'tags',)
-    inlines = [RecipeInline, ]
+    inlines = [RecipeTagInline, RecipeIngredientInline, ]
 
     def num_favorite_recipes(self, obj):
         """Общее число добавлений конкретного рецепта в избранное."""

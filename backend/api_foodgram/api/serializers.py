@@ -9,7 +9,8 @@ from django.db import transaction
 
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
-from drf_extra_fields.fields import Base64ImageField
+# from drf_extra_fields.fields import Base64ImageField, Hex2NameColor
+from .fields import Base64ImageField, Hex2NameColor
 
 from recipes.models import (
     Tag,
@@ -144,6 +145,8 @@ class SetPasswordSerializer(serializers.Serializer):
 
 class TagSerializer(serializers.ModelSerializer):
     """Сериализатор для тегов"""
+    color = Hex2NameColor()
+
     class Meta:
         model = Tag
         fields = (
@@ -186,6 +189,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     """Сериализатор для рецептов"""
     author = UserSerializer(read_only=True)
+    image = Base64ImageField
     tags = TagSerializer(many=True)
     ingredients = RecipeIngredientSerializer(
         read_only=True,

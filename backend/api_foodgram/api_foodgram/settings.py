@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'django_filters',
     'djoser',
+    'colorfield',
     'recipes',
     'api',
     'users',
