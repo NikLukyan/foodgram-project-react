@@ -46,3 +46,17 @@ class AuthorAndStaffOrReadOnly(permissions.BasePermission):
             or request.user.is_admin
             or request.user.is_moderator
         )
+
+
+class AdminAllOnlyAuthorPermission(permissions.BasePermission):
+    """
+    Кастомный пермишен для работы администратора и
+    автора объекта с небезопасными методами.
+    """
+    def has_object_permission(self, request, view, obj):
+        """Определяем права на уровне объекта."""
+        return bool(
+            request.user.is_superuser
+            or obj.author == request.user
+            or request.user.groups.filter(name='recipes_admins').exists()
+        )

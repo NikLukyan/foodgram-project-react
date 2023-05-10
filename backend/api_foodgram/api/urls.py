@@ -2,7 +2,9 @@ from django.urls import include, path, re_path
 from rest_framework import routers
 
 from .views import (
-    UserViewSet, TagViewSet,
+    UserViewSet,
+    TagViewSet,
+    IngredientViewSet, RecipeViewSet,
 )
 
 app_name = 'api'
@@ -10,18 +12,8 @@ app_name = 'api'
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, basename='users')
 router.register(r'tags', TagViewSet, basename='tags')
-# router.register(r'genres', GenresViewSet, basename='genres')
-# router.register(r'categories', CategoryViewSet, basename='categories')
-# router.register(
-#     r'titles/(?P<title_id>\d+)/reviews',
-#     ReviewViewSet,
-#     basename='review',
-# )
-# router.register(
-#     r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
-#     CommentViewSet,
-#     basename='comment',
-# )
+router.register(r'ingredients', IngredientViewSet, basename='ingredients')
+router.register(r'recipes', RecipeViewSet, basename='recipes')
 
 urlpatterns = [
     path('', include(router.urls)),
