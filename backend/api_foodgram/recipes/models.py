@@ -222,7 +222,8 @@ class ShoppingCartUser(models.Model):
         on_delete=models.CASCADE,
         related_name='recipe_in_shoplist',
         verbose_name='Рецепт из списка покупок пользователя',
-        help_text='Рецепт в списке покупок',    )
+        help_text='Рецепт в списке покупок',
+    )
 
     class Meta:
         verbose_name = 'Список покупок'

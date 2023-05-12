@@ -10,7 +10,6 @@ class UserAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
         'password',
-        'auth_token',
     )
     list_filter = ('email', 'username',)
 

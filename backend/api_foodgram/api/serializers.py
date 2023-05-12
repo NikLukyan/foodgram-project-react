@@ -1,28 +1,21 @@
-import base64
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.password_validation import validate_password
-from django.core.files.base import ContentFile
-from django.db import transaction
 
 from rest_framework import serializers
-from rest_framework.generics import get_object_or_404
-# from drf_extra_fields.fields import Base64ImageField, Hex2NameColor
+
 from .fields import Base64ImageField, Hex2NameColor
 
 from recipes.models import (
     Tag,
     Ingredient,
     Recipe,
-    RecipeTag,
     RecipeIngredient,
     FavoriteRecipeUser,
     ShoppingCartUser
 )
 from users.models import Follow
-
 
 User = get_user_model()
 
@@ -37,6 +30,7 @@ class SubRecipeSerializer(serializers.ModelSerializer):
             'image',
             'cooking_time',
         )
+
 
 class SubscriptionsSerializer(serializers.ModelSerializer):
     """Сериалайзер для вывода подписок пользователя."""
@@ -72,14 +66,15 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
         recipes_limit = self.context['request'].GET.get('recipes_limit')
         # вводим рецепты интересующего пользователя,
         # отталкиваясь от параметра recipes_limit, если он есть
-        interes_user = obj
+        interest_user = obj
         if recipes_limit:
             return SubRecipeSerializer(Recipe.objects.filter(
-                author=interes_user)[:int(recipes_limit)],
-                many=True).data
+                author=interest_user)[:int(recipes_limit)],
+                                       many=True).data
         return SubRecipeSerializer(
-            Recipe.objects.filter(author=interes_user),
+            Recipe.objects.filter(author=interest_user),
             many=True).data
+
 
 def user_is_subscribed(self, obj):
     """Подписан ли текущий пользователь на другого пользователя."""
@@ -189,7 +184,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     """Сериализатор для рецептов"""
     author = UserSerializer(read_only=True)
-    image = Base64ImageField
+    image = Base64ImageField()
     tags = TagSerializer(many=True)
     ingredients = RecipeIngredientSerializer(
         read_only=True,

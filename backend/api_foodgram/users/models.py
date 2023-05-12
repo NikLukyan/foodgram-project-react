@@ -6,11 +6,6 @@ from django.db import models
 from .validators import validate_username
 
 
-class UserRole(models.TextChoices):
-    USER = 'user', 'Пользователь'
-    ADMIN = 'admin', 'Администратор'
-
-
 class User(AbstractUser):
     """Описание нестандартной модели пользователя."""
     username = models.CharField(
@@ -35,12 +30,6 @@ class User(AbstractUser):
         max_length=150,
         verbose_name='Фамилия пользователя',
     )
-    # role = models.CharField(
-    #     max_length=16,
-    #     choices=UserRole.choices,
-    #     default=UserRole.USER,
-    #     verbose_name='Роль',
-    # )
     password = models.CharField(
         verbose_name='Пароль',
         max_length=150,
@@ -62,14 +51,6 @@ class User(AbstractUser):
     def __str__(self):
         """Строковое представление модели."""
         return self.email
-
-    # @property
-    # def is_admin(self):
-    #     return self.role == UserRole.ADMIN or self.is_superuser
-    #
-    # @property
-    # def is_user(self):
-    #     return self.role == UserRole.USER
 
 
 class Follow(models.Model):

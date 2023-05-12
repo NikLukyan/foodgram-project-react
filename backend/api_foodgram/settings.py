@@ -10,14 +10,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-b7*!e)oq_nlo1b!d2ukzf&#w+evc59)_3qn_xh8m4z@4x=h#dp'
 
-
 DEBUG = True
 
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
-ALLOWED_HOSTS = ['*']
-
-# Application definition
+ALLOWED_HOSTS = ['localhost',
+                 '127.0.0.1',
+                 'host.docker.internal',
+                 '[::1]',
+                 'testserver',
+                 ]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -79,9 +79,6 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -99,14 +96,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'users.User'
 
-# CSV_DATA_DIR = os.path.join(BASE_DIR, "data")
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
-
 LANGUAGE_CODE = 'ru'
 
-# TIME_ZONE = 'UTC'
 TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
@@ -115,35 +106,37 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
-
-# STATIC_URL = '/static/'
-
 STATIC_URL = '/backend_static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'backend_static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
 
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'Foodgram API',
-    'DESCRIPTION': 'Foodgram',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    'HIDE_USERS': False,
+    'SEND_ACTIVATION_EMAIL': False,
+
+    'SERIALIZERS': {
+        'user_create': 'api.serializers.NewUserSerializer',
+        'current_user': 'api.serializers.UserSerializer',
+        'user': 'api.serializers.UserSerializer',
+    },
+    'PERMISSIONS': {
+        'user': ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
+        'user_list': ('rest_framework.permissions.AllowAny',),
+        'token_create': ['rest_framework.permissions.AllowAny'],
+    },
 }
+
