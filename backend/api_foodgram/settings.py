@@ -14,9 +14,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost',
                  '127.0.0.1',
-                 'host.docker.internal',
-                 '[::1]',
-                 'testserver',
+                 'backend',
                  ]
 
 INSTALLED_APPS = [
@@ -32,6 +30,7 @@ INSTALLED_APPS = [
     'django_filters',
     'djoser',
     'colorfield',
+    'django_dump_load_utf8',
     'recipes',
     'api',
     'users',
@@ -70,10 +69,10 @@ WSGI_APPLICATION = 'api_foodgram.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
-        'NAME': os.getenv('DB_NAME', default='foodgram_db'),
+        'NAME': os.getenv('DB_NAME', default='postgres'),
         'USER': os.getenv('POSTGRES_USER', default='postgres'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='admin'),
-        'HOST': os.getenv('DB_HOST', default='localhost'),
+        'HOST': os.getenv('DB_HOST', default='db'),
         'PORT': os.getenv('DB_PORT', default='5432')
     }
 }
