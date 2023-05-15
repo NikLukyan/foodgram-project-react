@@ -25,10 +25,6 @@ docker compose exec backend python manage.py migrate
 ```
 sudo docker-compose exec backend python manage.py collectstatic --no-input
 ```
-Их общий пароль:
-```
-allTestUsersPASS$!
-```
 Загружаем первоначальные данные в БД при помощи фикстур
 ```
 docker compose exec backend python manage.py loaddata --exclude auth.permission --exclude contenttypes fixtures.json
