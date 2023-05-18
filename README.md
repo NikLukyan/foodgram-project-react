@@ -23,7 +23,7 @@ docker compose exec backend python manage.py migrate
 ```
 Собираем статические файлы
 ```
-sudo docker-compose exec backend python manage.py collectstatic --no-input
+docker compose exec backend python manage.py collectstatic --no-input
 ```
 Загружаем первоначальные данные в БД при помощи фикстур
 ```

@@ -22,13 +22,3 @@ def validate_username(username):
             'в качестве username запрещено.'
         )
     return username
-
-
-def validate_email(email):
-    try:
-        validate_email(email)
-    except Exception:
-        raise ValidationError(
-            'Введен некорректный почтовый ящик'
-        )
-    return email

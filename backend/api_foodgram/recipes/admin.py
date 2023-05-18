@@ -25,7 +25,6 @@ class RecipeAdmin(admin.ModelAdmin):
     inlines = [RecipeTagInline, RecipeIngredientInline, ]
 
     def num_favorite_recipes(self, obj):
-        """Общее число добавлений конкретного рецепта в избранное."""
         return FavoriteRecipeUser.objects.filter(recipe=obj).count()
 
     class Meta:

@@ -11,7 +11,8 @@ class UserAdmin(admin.ModelAdmin):
         'last_name',
         'password',
     )
-    list_filter = ('email', 'username',)
+    search_fields = ('email', 'username',)
+    list_filter = ('is_superuser',)
 
 
 admin.site.register(User, UserAdmin)

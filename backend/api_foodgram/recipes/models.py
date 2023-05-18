@@ -3,16 +3,14 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from recipes.validators import hex_field_validator, slug_field_validator
+from recipes.validators import hex_field_validator
 
 User = get_user_model()
 
 
 class Tag(models.Model):
-    """Модель тега."""
     name = models.CharField(
         unique=True,
-        db_index=True,
         max_length=200,
         verbose_name='Тег',
         help_text='Введите название тега',
@@ -26,11 +24,9 @@ class Tag(models.Model):
 
     slug = models.SlugField(
         unique=True,
-        db_index=True,
         max_length=200,
         verbose_name='Слаг тега',
         help_text='Введите слаг тега',
-        validators=[slug_field_validator]
     )
 
     class Meta:
@@ -43,10 +39,8 @@ class Tag(models.Model):
 
 
 class Ingredient(models.Model):
-    """Модель ингредиента."""
     name = models.CharField(
         max_length=200,
-        db_index=True,
         verbose_name='Ингредиент',
         help_text='Введите название ингредиента',
     )
@@ -66,7 +60,6 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
-    """Модель рецепта."""
     tags = models.ManyToManyField(
         Tag,
         db_index=True,
@@ -119,6 +112,7 @@ class Recipe(models.Model):
         help_text='Время приготовления в минутах',
     )
     pub_date = models.DateTimeField(
+        db_index=True,
         auto_now_add=True,
         verbose_name='Дата публикации',
     )
@@ -133,7 +127,6 @@ class Recipe(models.Model):
 
 
 class RecipeTag(models.Model):
-    """Модель отношения Тег-Рецепт."""
     tag = models.ForeignKey(
         Tag,
         on_delete=models.CASCADE,
@@ -157,15 +150,8 @@ class RecipeTag(models.Model):
             ),
         ]
 
-    def __str__(self):
-        return 'Тег {} в рецепте {}'.format(
-            self.tag,
-            self.recipe
-        )
-
 
 class RecipeIngredient(models.Model):
-    """Модель отношения Ингредиент-Рецепт."""
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
@@ -185,10 +171,6 @@ class RecipeIngredient(models.Model):
                 limit_value=1,
                 message='Количество должно быть больше 0.'
             ),
-            MaxValueValidator(
-                limit_value=1000,
-                message='Количество ингредиентов не может быть больше 1000!'
-            )
         ],
     )
 
@@ -201,12 +183,6 @@ class RecipeIngredient(models.Model):
                 fields=['ingredient', 'recipe'],
             ),
         ]
-
-    def __str__(self):
-        return 'Ингридиент {} в рецепте {}'.format(
-            self.ingredient,
-            self.recipe
-        )
 
 
 class ShoppingCartUser(models.Model):
@@ -235,12 +211,6 @@ class ShoppingCartUser(models.Model):
             ),
         ]
 
-    def __str__(self):
-        return 'У {} в списке покупок рецепт: {}'.format(
-            self.user,
-            self.recipe
-        )
-
 
 class FavoriteRecipeUser(models.Model):
     user = models.ForeignKey(
@@ -267,9 +237,3 @@ class FavoriteRecipeUser(models.Model):
                 fields=['user', 'recipe'],
             ),
         ]
-
-    def __str__(self):
-        return 'У {} в избранном рецепт: {}'.format(
-            self.user,
-            self.recipe
-        )
