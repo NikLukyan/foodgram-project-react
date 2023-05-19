@@ -22,8 +22,7 @@ class CustomRecipeFilterSet(filters.FilterSet):
         if not user.is_anonymous:
             if value is True:
                 return queryset.filter(**map_dict)
-            elif value is False:
-                return queryset.exclude(**map_dict)
+            return queryset.exclude(**map_dict)
         return queryset
 
     def filter_is_favorited(self, queryset, name, value):

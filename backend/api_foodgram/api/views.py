@@ -4,14 +4,14 @@ from api.permissions import IsAuthorOrAdminOrReadOnly
 from api.serializers import (IngredientSerializer, NewUserSerializer,
                              RecipeCreateUpdateSerializer, RecipeSerializer,
                              SetPasswordSerializer, SubscriptionsSerializer,
-                             TagSerializer, UserSerializer,)
+                             TagSerializer, UserSerializer, )
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password, make_password
 from django.db.models import Sum
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from recipes.models import (FavoriteRecipeUser, Ingredient, Recipe,
-                            ShoppingCartUser, Tag,)
+                            ShoppingCartUser, Tag, )
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -54,11 +54,10 @@ class UserViewSet(viewsets.ModelViewSet):
                 user.password = new_password
                 user.save()
                 return Response(status=status.HTTP_204_NO_CONTENT)
-            else:
-                return Response(
-                    {'current_password': 'Вы ввели неверный пароль'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+            return Response(
+                {'current_password': 'Вы ввели неверный пароль'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False,
@@ -90,14 +89,13 @@ class UserViewSet(viewsets.ModelViewSet):
                     {'errors': 'Невозможно подписаться на самого себя.'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            elif Follow.objects.filter(
+            if Follow.objects.filter(
                     following=interest_user,
                     user=request.user).exists():
                 return Response(
-                    {'errors': (
-                            'Вы уже подписаны на пользователя '
-                            + f'{interest_user.username}.'
-                    )},
+                    {'errors': ('Вы уже подписаны на пользователя '
+                                + f'{interest_user.username}.'
+                                )},
                     status=status.HTTP_400_BAD_REQUEST
                 )
             Follow.objects.create(following=interest_user, user=request.user)
@@ -117,8 +115,8 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(
             {'errors': (
-                    'Вы не были подписаны на пользователя '
-                    + f'{interest_user.username}.'
+                        'Вы не были подписаны на пользователя '
+                        + f'{interest_user.username}.'
             )},
             status=status.HTTP_400_BAD_REQUEST
         )
@@ -229,21 +227,21 @@ class RecipeViewSet(viewsets.ModelViewSet):
             sum_amount_ingredients=(Sum('ingredient_in_recipe__amount'))
         )
         content = (
-                'Ваш сервис, Продуктовый помощник, подготовил \nсписок '
-                + 'покупок по выбранным рецептам:\n'
-                + 50 * '_'
-                + '\n\n'
+                    'Ваш сервис, Продуктовый помощник, подготовил \nсписок '
+                    + 'покупок по выбранным рецептам:\n'
+                    + 50 * '_'
+                    + '\n\n'
         )
         if not queryset_ingredients:
             content += (
-                    'К сожалению, в списке ваших покупок пусто - '
-                    + 'поскольку Вы не добавили в него ни одного рецепта.'
+                        'К сожалению, в списке ваших покупок пусто - '
+                        + 'поскольку Вы не добавили в него ни одного рецепта.'
             )
         else:
             for ingr in queryset_ingredients:
                 content += (
-                        f'\t•\t{ingr.name} ({ingr.measurement_unit}) — '
-                        + f'{ingr.sum_amount_ingredients}\n\n'
+                            f'\t•\t{ingr.name} ({ingr.measurement_unit}) — '
+                            + f'{ingr.sum_amount_ingredients}\n\n'
                 )
         filename = 'my_shopping_cart.txt'
         response = HttpResponse(content, content_type='text/plain')

@@ -138,4 +138,3 @@ DJOSER = {
         'token_create': ['rest_framework.permissions.AllowAny'],
     },
 }
-

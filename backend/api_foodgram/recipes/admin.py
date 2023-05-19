@@ -29,7 +29,6 @@ class IngredientAdmin(admin.ModelAdmin):
     list_filter = ('name',)
 
 
-
 class TagAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'color', 'slug')
     list_filter = ('name',)

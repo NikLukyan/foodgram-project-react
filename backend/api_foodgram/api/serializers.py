@@ -4,8 +4,14 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.password_validation import validate_password
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import (FavoriteRecipeUser, Ingredient, Recipe,
-                            RecipeIngredient, ShoppingCartUser, Tag,)
+from recipes.models import (
+    FavoriteRecipeUser,
+    Ingredient,
+    Recipe,
+    RecipeIngredient,
+    ShoppingCartUser,
+    Tag,
+)
 from rest_framework import serializers
 from users.models import Follow
 
@@ -51,12 +57,11 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
         recipes_limit = self.context['request'].GET.get('recipes_limit')
         interest_user = obj
         if recipes_limit:
-            return SubRecipeSerializer(Recipe.objects.filter(
-                author=interest_user)[:int(recipes_limit)],
-                                       many=True).data
+            return SubRecipeSerializer(
+                Recipe.objects.filter(author=interest_user)
+                [:int(recipes_limit)], many=True).data
         return SubRecipeSerializer(
-            Recipe.objects.filter(author=interest_user),
-            many=True).data
+            Recipe.objects.filter(author=interest_user), many=True).data
 
 
 def user_is_subscribed(self, obj):
