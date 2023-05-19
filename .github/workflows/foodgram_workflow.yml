@@ -40,12 +40,20 @@ jobs:
             username: ${{ secrets.DOCKER_USERNAME }}
             password: ${{ secrets.DOCKER_PASSWORD }}
 
-        - name: Push to Docker Hub
+        - name: Push backend to Docker Hub
           uses: docker/build-push-action@v2
           with:
             context: ./backend/api_foodgram
+            file: ./backend/api_foodgram/Dockerfile
             push: true
-            tags: niklukyan/foodgram_backend:latest
+            tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
+        - name: Push frontend to Docker Hub
+          uses: docker/build-push-action@v2
+          with:
+            context: ./frontend
+            file: ./frontend/Dockerfile
+            push: true
+            tags: ${{  secrets.DOCKER_USERNAME  }}/foodgram_frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -59,10 +67,10 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-
           script: |
             sudo docker compose stop
-            sudo docker compose rm backend
+            sudo docker compose rm -f web
+            sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
             rm .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
@@ -71,4 +79,5 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+            sudo docker compose pull
             sudo docker compose up --build -d
