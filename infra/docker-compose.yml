@@ -15,7 +15,7 @@ services:
       - ./.env
 
   backend:
-    build: ../backend/api_foodgram
+    image: niklukyan/foodgram_backend:v1.0
     restart: always
     volumes:
       - static_value:/app/backend_static/
@@ -26,9 +26,7 @@ services:
       - ./.env
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: niklukyan/foodgram_frontend:v1.0
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
