@@ -1,34 +1,22 @@
+from api.filters import CustomRecipeFilterSet, IngredientSearchFilter
+from api.pagination import RecipeUserPagination
+from api.permissions import IsAuthorOrAdminOrReadOnly
+from api.serializers import (IngredientSerializer, NewUserSerializer,
+                             RecipeCreateUpdateSerializer, RecipeSerializer,
+                             SetPasswordSerializer, SubscriptionsSerializer,
+                             TagSerializer, UserSerializer,)
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password, make_password
 from django.db.models import Sum
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, status
+from recipes.models import (FavoriteRecipeUser, Ingredient, Recipe,
+                            ShoppingCartUser, Tag,)
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-
-from api.filters import IngredientSearchFilter, CustomRecipeFilterSet
-from api.pagination import RecipeUserPagination
-from api.permissions import IsAuthorOrAdminOrReadOnly
-from api.serializers import (
-    UserSerializer,
-    NewUserSerializer,
-    SetPasswordSerializer,
-    TagSerializer,
-    IngredientSerializer,
-    RecipeSerializer,
-    RecipeCreateUpdateSerializer,
-    SubscriptionsSerializer,
-)
-from recipes.models import (
-    Tag,
-    Ingredient,
-    Recipe,
-    FavoriteRecipeUser,
-    ShoppingCartUser
-)
 from users.models import Follow
 
 User = get_user_model()

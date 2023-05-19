@@ -3,7 +3,6 @@ import re
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
-
 RESTRICTED_USERNAME = 'me'
 PATTERN = re.compile(r'[\w.@+-]+')
 

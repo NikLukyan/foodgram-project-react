@@ -1,6 +1,6 @@
-from django_filters import rest_framework as filters, AllValuesMultipleFilter
-
-from recipes.models import Ingredient, Tag, Recipe
+from django_filters import AllValuesMultipleFilter
+from django_filters import rest_framework as filters
+from recipes.models import Ingredient, Recipe, Tag
 
 
 class CustomRecipeFilterSet(filters.FilterSet):
