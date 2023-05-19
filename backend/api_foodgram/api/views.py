@@ -114,10 +114,8 @@ class UserViewSet(viewsets.ModelViewSet):
             subscribe.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(
-            {'errors': (
-                        'Вы не были подписаны на пользователя '
-                        + f'{interest_user.username}.'
-            )},
+            {'errors': ('Вы не были подписаны на пользователя '
+                        + f'{interest_user.username}.')},
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -226,12 +224,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         queryset_ingredients = ingredients.annotate(
             sum_amount_ingredients=(Sum('ingredient_in_recipe__amount'))
         )
-        content = (
-                    'Ваш сервис, Продуктовый помощник, подготовил \nсписок '
-                    + 'покупок по выбранным рецептам:\n'
-                    + 50 * '_'
-                    + '\n\n'
-        )
+        content = ('Ваш сервис, Продуктовый помощник, подготовил \nсписок '
+                   + 'покупок по выбранным рецептам:\n'
+                   + 50 * '_'
+                   + '\n\n')
         if not queryset_ingredients:
             content += (
                         'К сожалению, в списке ваших покупок пусто - '
@@ -239,13 +235,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
             )
         else:
             for ingr in queryset_ingredients:
-                content += (
-                            f'\t•\t{ingr.name} ({ingr.measurement_unit}) — '
-                            + f'{ingr.sum_amount_ingredients}\n\n'
-                )
+                content += (f'\t•\t{ingr.name} ({ingr.measurement_unit}) — '
+                            + f'{ingr.sum_amount_ingredients}\n\n')
         filename = 'my_shopping_cart.txt'
         response = HttpResponse(content, content_type='text/plain')
         response['Content-Disposition'] = 'attachment; filename={0}'.format(
-            filename
-        )
+            filename)
         return response
