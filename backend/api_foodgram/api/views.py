@@ -4,14 +4,14 @@ from api.permissions import IsAuthorOrAdminOrReadOnly
 from api.serializers import (IngredientSerializer, NewUserSerializer,
                              RecipeCreateUpdateSerializer, RecipeSerializer,
                              SetPasswordSerializer, SubscriptionsSerializer,
-                             TagSerializer, UserSerializer, )
+                             TagSerializer, UserSerializer,)
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password, make_password
 from django.db.models import Sum
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from recipes.models import (FavoriteRecipeUser, Ingredient, Recipe,
-                            ShoppingCartUser, Tag, )
+                            ShoppingCartUser, Tag,)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
