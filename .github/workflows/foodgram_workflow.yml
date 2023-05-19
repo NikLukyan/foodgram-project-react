@@ -67,6 +67,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
+
           script: |
             sudo docker compose stop
             sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
