@@ -229,10 +229,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
                    + 50 * '_'
                    + '\n\n')
         if not queryset_ingredients:
-            content += (
-                        'К сожалению, в списке ваших покупок пусто - '
-                        + 'поскольку Вы не добавили в него ни одного рецепта.'
-            )
+            content += ('К сожалению, в списке ваших покупок пусто - '
+                        + 'поскольку Вы не добавили в него ни одного рецепта.')
         else:
             for ingr in queryset_ingredients:
                 content += (f'\t•\t{ingr.name} ({ingr.measurement_unit}) — '
