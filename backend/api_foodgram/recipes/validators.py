@@ -1,6 +1,6 @@
-import re
-
 from django.core.exceptions import ValidationError
+
+import re
 
 
 def hex_field_validator(value):

@@ -1,12 +1,13 @@
-from api.fields import Hex2NameColor
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.password_validation import validate_password
 from drf_extra_fields.fields import Base64ImageField
+from rest_framework import serializers
+
+from api.fields import Hex2NameColor
 from recipes.models import (FavoriteRecipeUser, Ingredient, Recipe,
                             RecipeIngredient, ShoppingCartUser, Tag,)
-from rest_framework import serializers
 from users.models import Follow
 
 User = get_user_model()

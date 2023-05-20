@@ -1,6 +1,6 @@
-import re
-
 from django.core.exceptions import ValidationError
+
+import re
 
 RESTRICTED_USERNAME = 'me'
 PATTERN = re.compile(r'[\w.@+-]+')

@@ -2,7 +2,7 @@
 Проект Foodgram продуктовый помощник - платформа для публикации рецептов.
 
 ![Foodgram-project-react](https://github.com/niklukyan/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
-
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
 ## Адрес развернутого приложения:
 

@@ -15,9 +15,9 @@ from api.permissions import IsAuthorOrAdminOrReadOnly
 from api.serializers import (IngredientSerializer, NewUserSerializer,
                              RecipeCreateUpdateSerializer, RecipeSerializer,
                              SetPasswordSerializer, SubscriptionsSerializer,
-                             TagSerializer, UserSerializer, )
+                             TagSerializer, UserSerializer,)
 from recipes.models import (FavoriteRecipeUser, Ingredient, Recipe,
-                            ShoppingCartUser, Tag, )
+                            ShoppingCartUser, Tag,)
 from users.models import Follow
 
 User = get_user_model()
